@@ -1,10 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { Capacity } from './capacity.schema';
-import { Color } from './color.schema';
-import { Grade } from './grade.schema';
-import { Product } from './product.schema';
-import { PaymentType } from './payment-type';
+import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { DocumentType } from './document-type';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -27,16 +23,10 @@ export class User {
   documentType: DocumentType;
 
   @Prop({ trim: true, required: true })
-  document: string;
+  documentNumber: string;
 
-  @Prop({ trim: true, required: true })
-  department: string;
-
-  @Prop({ trim: true, required: true })
-  province: string;
-
-  @Prop({ trim: true, required: true })
-  district: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Ubigeo', required: true })
+  ubigeo: ObjectId;
 
   @Prop({ trim: true, required: true })
   address: string;

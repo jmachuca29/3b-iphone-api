@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Capacity } from './capacity.schema';
-import { Color } from './color.schema';
 import { Grade } from './grade.schema';
 import { Product } from './product.schema';
 import { PaymentType } from './payment-type';
+import { Accesories } from 'src/constant/accesories';
 
 export type SaleDocument = HydratedDocument<Sale>;
 
@@ -15,9 +15,9 @@ export class Sale {
   product: Product;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Capacity', required: true })
-  capacity: Color;
+  capacity: Capacity;
 
-  @Prop({ enum: ['ORIGINAL BOX'], required: true })
+  @Prop({ enum: Accesories, required: true })
   accesories: string;
 
   @Prop({ trim: true, required: true })
