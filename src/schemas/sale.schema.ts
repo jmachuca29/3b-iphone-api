@@ -5,6 +5,7 @@ import { Grade } from './grade.schema';
 import { Product } from './product.schema';
 import { PaymentType } from './payment-type';
 import { Accesories } from 'src/constant/accesories';
+import { SaleStatus } from 'src/constant/sale';
 
 export type SaleDocument = HydratedDocument<Sale>;
 
@@ -44,7 +45,7 @@ export class Sale {
   @Prop({ required: true })
   price: number;
 
-  @Prop({ enum: ['APPROVED', 'REJECTED', 'REAJUSTED'] })
+  @Prop({ enum: SaleStatus })
   status: string;
 }
 

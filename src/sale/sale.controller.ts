@@ -13,10 +13,12 @@ import {
 import { SaleService } from "./sale.service";
 import { CreateSaleDto } from "src/dto/create-sale.dto";
 import { UpdateSaleDto } from "src/dto/update-sale.dto";
+import { ProductService } from "src/product/product.service";
+import { getPriceBasedOnBattery } from "src/utils/sale";
 
 @Controller("sale")
 export class SaleController {
-  constructor(private saleService: SaleService) {}
+  constructor(private saleService: SaleService, private productService: ProductService) {}
 
   @Get()
   findAll() {
@@ -26,7 +28,13 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
-      return await this.saleService.create(body);
+      const productPrice = await this.productService.findProductPrice(body.product, body.grade)
+      const price = getPriceBasedOnBattery(productPrice, body.battery);
+      const product: CreateSaleDto = {
+        ...body,
+        price
+      }
+      return await this.saleService.create(product);
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException("Sale already exists");

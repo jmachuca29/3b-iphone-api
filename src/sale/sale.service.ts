@@ -9,7 +9,7 @@ import { Sale } from "src/schemas/sale.schema";
 export class SaleService {
   constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>) {}
 
-  async create(createSaleDto: CreateSaleDto): Promise<Sale> {
+  async create(createSaleDto: CreateSaleDto): Promise<any> {
     const createdSale = new this.saleModel(createSaleDto);
     return createdSale.save();
   }
@@ -29,4 +29,5 @@ export class SaleService {
   async update(id: string, createSaleDto: UpdateSaleDto): Promise<Sale> {
     return this.saleModel.findByIdAndUpdate(id, createSaleDto, { new: true });
   }
+
 }
