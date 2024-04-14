@@ -1,20 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateUserDto } from 'src/dto/create-user.dto';
-import { UpdateUserDto } from 'src/dto/update-user.dto';
-import { User } from 'src/schemas/user.schema';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { CreateUserDto } from "src/dto/create-user.dto";
+import { UpdateUserDto } from "src/dto/update-user.dto";
+import { User } from "src/schemas/user.schema";
 
 @Injectable()
-export class  UserService {
-    constructor(@InjectModel(User.name) private userModel: Model<User>){}
+export class UserService {
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
-        const createdUser = new this.userModel(createUserDto);
-        return createdUser.save();
-      }
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const createdUser = new this.userModel(createUserDto);
+    return createdUser.save();
+  }
 
-   async findAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
@@ -30,4 +30,7 @@ export class  UserService {
     return this.userModel.findByIdAndUpdate(id, createUserDto, { new: true });
   }
 
+  async findByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email }).exec();
+  }
 }

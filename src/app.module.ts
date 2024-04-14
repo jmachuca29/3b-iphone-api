@@ -10,6 +10,8 @@ import { DepartmentModule } from './deparment/department.module';
 import { ProductModule } from './product/product.module';
 import { SaleModule } from './sale/sale.module';
 import { UserModule } from './user/user.module';
+import { AccountModule } from './account/account.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { UserModule } from './user/user.module';
     ProductModule,
     SaleModule,
     UserModule,
-    MongooseModule.forRoot('mongodb+srv://jmachucapaulino29:s62VMD6XIuHAK7An@cluster0.4idcgbl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
+    AccountModule,
+    AuthModule,
+    MongooseModule.forRoot(process.env.DB),
   ],
   controllers: [],
   providers: [],
