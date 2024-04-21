@@ -12,6 +12,7 @@ import { SaleModule } from './sale/sale.module';
 import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
+import { UbigeoModule } from './ubigeo/ubigeo.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     AccountModule,
     AuthModule,
+    UbigeoModule,
     MongooseModule.forRoot(process.env.DB),
   ],
   controllers: [],
