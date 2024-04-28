@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { AccountService } from "src/account/account.service";
 import * as bcrypt from "bcrypt";
@@ -10,24 +14,18 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const userDB = await this.accountService.findByEmail(username);
-    if (!userDB) return null;
-    const validPassword = bcrypt.compareSync(pass, userDB.password);
+  async signIn(
+    username: string,
+    pass: string
+  ): Promise<{ access_token: string }> {
+    const user = await this.accountService.findByEmail(username);
+    const validPassword = bcrypt.compareSync(pass, user.password);
     if (!validPassword) {
       throw new ConflictException("User / Password not valid");
     }
-    const payload = {
-      email: userDB.email,
-      userId: userDB.user,
-    }
-    return payload
-  }
-
-  async login(user: any) {
-    const payload = { username: user.email, sub: user.userId };
+    const payload = { sub: user.user, username: user.email };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: await this.jwtService.signAsync(payload, { secret: process.env.JWT_SECRET }),
     };
   }
 }

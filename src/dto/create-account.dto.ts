@@ -3,6 +3,7 @@ import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
 import { ObjectId } from "mongoose";
 
 export class CreateAccountDto {
+
   @IsString()
   @IsNotEmpty()
   email: string;
@@ -10,12 +11,13 @@ export class CreateAccountDto {
   @IsString()
   @IsNotEmpty()
   password: string;
-  
+
   @ApiProperty({
-    description: "Reference to User document",
+    description: "Reference to TypeDocument document",
     required: true,
   })
   @IsMongoId()
   @IsNotEmpty()
   user: ObjectId;
+  
 }

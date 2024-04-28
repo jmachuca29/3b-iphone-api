@@ -29,10 +29,9 @@ export class SaleController {
   async create(@Body() body: CreateSaleDto) {
     try {
       const productPrice = await this.productService.findProductPrice(body.product, body.grade)
-      const price = getPriceBasedOnBattery(productPrice, body.battery);
       const product: CreateSaleDto = {
         ...body,
-        price
+        price: productPrice
       }
       return await this.saleService.create(product);
     } catch (error) {

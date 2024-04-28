@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsMongoId, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ObjectId } from 'mongoose';
 
@@ -31,7 +31,7 @@ export class CreateProductDto {
     type: [Object],
     required: true,
   })
-  @IsMongoId({each: true})
+  @ValidateNested()
   @Type(() => PriceDTO)
   @IsNotEmpty()
   prices: PriceDTO[];

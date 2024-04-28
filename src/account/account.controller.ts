@@ -18,6 +18,7 @@ import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { CreateUserDto } from "src/dto/create-user.dto";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { CreateUserAccountDto } from "src/dto/create-user-account.dto";
 
 @Controller("account")
 export class AccountController {
@@ -33,7 +34,7 @@ export class AccountController {
   }
 
   @Post()
-  async create(@Body() body: CreateUserDto) {
+  async create(@Body() body: CreateUserAccountDto) {
     try {
       const email = body.email;
       const user = await this.userService.findByEmail(email);
@@ -45,16 +46,15 @@ export class AccountController {
 
       //Encriptar Contraseña
       const salt = bcrypt.genSaltSync();
-      const passwordHashed = bcrypt.hashSync(body.password, salt);
+      const hash = bcrypt.hashSync(body.password, salt);
       const account = {
-        user: newUser._id,
         email: email,
-        password: passwordHashed,
+        password: hash,
+        user: newUser._id,
       };
       const accountDB: any = await this.accountService.create(account);
-      return accountDB
+      return accountDB;
 
-      return;
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException("Account already exists");

@@ -2,7 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
 import { ObjectId } from "mongoose";
 
-export class CreateUserDto {
+export class CreateUserAccountDto {
+
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -43,4 +44,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   address: string;
 
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+  
 }
