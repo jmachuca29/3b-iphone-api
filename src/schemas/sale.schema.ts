@@ -45,7 +45,7 @@ export class Sale {
   @Prop({ required: true })
   price: number;
 
-  @Prop({ enum: SaleStatus })
+  @Prop({ enum: SaleStatus, default: SaleStatus.Pending })
   status: string;
 }
 

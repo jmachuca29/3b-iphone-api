@@ -1,8 +1,34 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsMongoId, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { ObjectId } from "mongoose";
 import { Accesories } from "src/constant/accesories";
-import { SaleStatus } from "src/constant/sale";
+import { Type } from 'class-transformer';
+
+export class UserDTO {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  last_name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  cellphone: string;
+
+  @IsString()
+  @IsNotEmpty()
+  ubigeo: string;
+
+  @IsString()
+  @IsNotEmpty()
+  address: string;
+}
 
 export class CreateSaleDto {
   @ApiProperty({
@@ -22,7 +48,7 @@ export class CreateSaleDto {
   capacity: ObjectId;
 
   @IsEnum(Accesories)
-  accesories: string;
+  accesories: string[];
 
   @IsString()
   @IsNotEmpty()
@@ -52,22 +78,13 @@ export class CreateSaleDto {
   @IsNotEmpty()
   grade: ObjectId;
 
-  @IsInt()
+  @Type(() => UserDTO)
   @IsNotEmpty()
-  battery: number;
-
-  @ApiProperty({
-    description: "Reference to User document",
-    required: true,
-  })
-  @IsMongoId()
-  @IsNotEmpty()
-  user: ObjectId;
+  user: UserDTO;
 
   @IsNumber()
   @IsNotEmpty()
   price: number;
 
-  @IsEnum(SaleStatus)
-  status: string;
 }
+
