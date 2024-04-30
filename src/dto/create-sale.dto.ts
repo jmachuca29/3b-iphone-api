@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsArray, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { ObjectId } from "mongoose";
 import { Accesories } from "src/constant/accesories";
 import { Type } from 'class-transformer';
@@ -47,8 +47,9 @@ export class CreateSaleDto {
   @IsNotEmpty()
   capacity: ObjectId;
 
-  @IsEnum(Accesories)
-  accesories: string[];
+  @IsArray()
+  @IsEnum(Accesories, { each: true })
+  accesories: Accesories[];
 
   @IsString()
   @IsNotEmpty()
@@ -83,7 +84,7 @@ export class CreateSaleDto {
   user: UserDTO;
 
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   price: number;
 
 }

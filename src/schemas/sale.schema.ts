@@ -7,6 +7,31 @@ import { PaymentType } from './payment-type';
 import { Accesories } from 'src/constant/accesories';
 import { SaleStatus } from 'src/constant/sale';
 
+
+
+@Schema()
+export class User {
+  @Prop({ trim: true, required: true })
+  name: string;
+
+  @Prop({ trim: true, required: true })
+  last_name: string;
+
+  @Prop({ trim: true, required: true })
+  email: string;
+
+  @Prop({ trim: true, required: true })
+  cellphone: string;
+
+  @Prop({ trim: true, required: true })
+  ubigeo: string;
+
+  @Prop({ trim: true, required: true })
+  address: string;
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
+
 export type SaleDocument = HydratedDocument<Sale>;
 
 @Schema()
@@ -18,8 +43,8 @@ export class Sale {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Capacity', required: true })
   capacity: Capacity;
 
-  @Prop({ enum: Accesories, required: true })
-  accesories: string;
+  @Prop({ required: true })
+  accesories: string[];
 
   @Prop({ trim: true, required: true })
   serieNumber: string;
@@ -36,11 +61,8 @@ export class Sale {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Grade', required: true })
   grade: Grade;
 
-  @Prop({ required: true })
-  battery: number;
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: number;
+  @Prop({ type: UserSchema, required: true })
+  user: User;
 
   @Prop({ required: true })
   price: number;
