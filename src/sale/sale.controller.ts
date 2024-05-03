@@ -18,7 +18,7 @@ import { getPriceBasedOnBattery } from "src/utils/sale";
 
 @Controller("sale")
 export class SaleController {
-  constructor(private saleService: SaleService, private productService: ProductService) {}
+  constructor(private saleService: SaleService, private productService: ProductService) { }
 
   @Get()
   findAll() {
@@ -28,7 +28,9 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
-      const productPrice = await this.productService.findProductPrice(body.product, body.grade)
+      const productId = { ...body.product }.toString()
+      const grade = { ...body.grade }.toString()
+      const productPrice = await this.productService.findProductPrice(productId, grade)
       const product: CreateSaleDto = {
         ...body,
         price: productPrice

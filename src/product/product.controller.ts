@@ -37,23 +37,30 @@ export class ProductController {
 
   @Get(":id")
   async findOne(@Param("id") id: string) {
-    const color = await this.productService.findOne(id);
-    if (!color) throw new NotFoundException("Product does not exist!");
-    return color;
+    const product = await this.productService.findOne(id);
+    if (!product) throw new NotFoundException("Product does not exist!");
+    return product;
   }
 
   @Delete(":id")
   @HttpCode(204)
   async delete(@Param("id") id: string) {
-    const color = await this.productService.delete(id);
-    if (!color) throw new NotFoundException("Product does not exist!");
-    return color;
+    const product = await this.productService.delete(id);
+    if (!product) throw new NotFoundException("Product does not exist!");
+    return product;
   }
 
   @Put(":id")
   async update(@Param("id") id: string, @Body() body: UpdateProductDto) {
-    const color = await this.productService.update(id, body);
-    if (!color) throw new NotFoundException("Product does not exist!");
-    return color;
+    const product = await this.productService.update(id, body);
+    if (!product) throw new NotFoundException("Product does not exist!");
+    return product;
+  }
+
+  @Get(":id/:gradeId")
+  async findProductPrice(@Param("id") id: string, @Param("gradeId") gradeId: string) {
+    const productPrice = await this.productService.findProductPrice(id, gradeId)
+    if (!productPrice) throw new NotFoundException("Product price does not exist!");
+    return productPrice;
   }
 }

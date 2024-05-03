@@ -17,7 +17,7 @@ export class ProductService {
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productModel.find().exec();
+    return this.productModel.find().populate('capacity').exec();
   }
 
   async findOne(id: string): Promise<Product> {
@@ -37,12 +37,12 @@ export class ProductService {
     });
   }
 
-  async findProductPrice(id: ObjectId, gradeId: ObjectId): Promise<number> {
+  async findProductPrice(id: string, gradeId: string): Promise<number> {
     const product = await this.productModel.findById(id).exec();
     if (!product) throw new NotFoundException("Product does not exist!");
     const prices: any[] = product.prices || [];
     const priceFound = prices.find(
-      (price) => price.grade.toString() === gradeId.toString()
+      (price) => price.grade.toString() === gradeId
     );
     return priceFound ? priceFound.price : null;
   }
