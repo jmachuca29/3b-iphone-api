@@ -14,7 +14,7 @@ import { SaleService } from "./sale.service";
 import { CreateSaleDto } from "src/dto/create-sale.dto";
 import { UpdateSaleDto } from "src/dto/update-sale.dto";
 import { ProductService } from "src/product/product.service";
-import { getPriceBasedOnBattery } from "src/utils/sale";
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller("sale")
 export class SaleController {
@@ -28,12 +28,13 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
-      const productId = { ...body.product }.toString()
-      const grade = { ...body.grade }.toString()
+      const productId = { ...body }.product.toString()
+      const grade = { ...body }.grade.toString()
       const productPrice = await this.productService.findProductPrice(productId, grade)
       const product: CreateSaleDto = {
         ...body,
-        price: productPrice
+        price: productPrice,
+        uuid: uuidv4()
       }
       return await this.saleService.create(product);
     } catch (error) {
@@ -47,6 +48,13 @@ export class SaleController {
   @Get(":id")
   async findOne(@Param("id") id: string) {
     const sale = await this.saleService.findOne(id);
+    if (!sale) throw new NotFoundException("Sale does not exist!");
+    return sale;
+  }
+
+  @Get("/uid/:uuid")
+  async findbyUID(@Param("uuid") uuid: string) {
+    const sale = await this.saleService.findbyUID(uuid);
     if (!sale) throw new NotFoundException("Sale does not exist!");
     return sale;
   }

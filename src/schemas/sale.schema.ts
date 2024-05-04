@@ -67,6 +67,9 @@ export class Sale {
   @Prop({ required: true })
   price: number;
 
+  @Prop({ required: true })
+  uuid: string;
+
   @Prop({ enum: SaleStatus, default: SaleStatus.Pending })
   status: string;
 }

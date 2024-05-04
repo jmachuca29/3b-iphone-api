@@ -7,7 +7,7 @@ import { Sale } from "src/schemas/sale.schema";
 
 @Injectable()
 export class SaleService {
-  constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>) {}
+  constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>) { }
 
   async create(createSaleDto: CreateSaleDto): Promise<any> {
     const createdSale = new this.saleModel(createSaleDto);
@@ -20,6 +20,10 @@ export class SaleService {
 
   async findOne(id: string): Promise<Sale> {
     return this.saleModel.findById(id).exec();
+  }
+
+  async findbyUID(uuid: string): Promise<Sale> {
+    return this.saleModel.findOne({ 'uuid': uuid }).exec();
   }
 
   async delete(id: string): Promise<Sale> {

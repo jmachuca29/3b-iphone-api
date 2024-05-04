@@ -87,5 +87,9 @@ export class CreateSaleDto {
   @IsOptional()
   price: number;
 
+  @IsString()
+  @IsOptional()
+  uuid: string;
+
 }
 
