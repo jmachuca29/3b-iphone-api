@@ -27,7 +27,7 @@ export class AccountController {
     private userService: UserService
   ) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.accountService.findAll();
