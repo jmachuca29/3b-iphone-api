@@ -23,8 +23,15 @@ export class SaleService {
   }
 
   async findbyUID(uuid: string): Promise<Sale> {
-    return this.saleModel.findOne({ 'uuid': uuid }).exec();
+    return this.saleModel.findOne({ 'uuid': uuid })
+      .populate({
+        path: 'product',
+        select: '-prices'
+      })
+      .populate('capacity')
+      .exec();
   }
+  
 
   async delete(id: string): Promise<Sale> {
     return this.saleModel.findByIdAndDelete(id);

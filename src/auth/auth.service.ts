@@ -19,6 +19,9 @@ export class AuthService {
     pass: string
   ): Promise<{ access_token: string }> {
     const user = await this.accountService.findByEmail(username);
+    if(!user) {
+      throw new ConflictException("User / Password not valid");
+    }
     const validPassword = bcrypt.compareSync(pass, user.password);
     if (!validPassword) {
       throw new ConflictException("User / Password not valid");
