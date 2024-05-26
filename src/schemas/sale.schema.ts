@@ -34,7 +34,7 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 export type SaleDocument = HydratedDocument<Sale>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Sale {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true })
