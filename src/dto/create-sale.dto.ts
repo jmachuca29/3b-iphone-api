@@ -91,5 +91,13 @@ export class CreateSaleDto {
   @IsOptional()
   uuid: string;
 
+  @IsString()
+  @IsNotEmpty()
+  bankEntity: string;
+
+  @IsString()
+  @IsNotEmpty()
+  numberAccount: string;
+
 }
 

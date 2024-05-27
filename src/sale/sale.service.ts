@@ -22,6 +22,10 @@ export class SaleService {
     return this.saleModel.findById(id).exec();
   }
 
+  async findbyEmail(email: string): Promise<any> {
+    return this.saleModel.find({ 'user.email': email }).exec();
+  }
+
   async findbyUID(uuid: string): Promise<Sale> {
     return this.saleModel.findOne({ 'uuid': uuid })
       .populate({

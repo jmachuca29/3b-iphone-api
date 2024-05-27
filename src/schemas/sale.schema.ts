@@ -72,6 +72,12 @@ export class Sale {
 
   @Prop({ enum: SaleStatus, default: SaleStatus.Pending })
   status: string;
+
+  @Prop({ required: true })
+  bankEntity: string;
+
+  @Prop({ required: true })
+  numberAccount: string;
 }
 
 export const SaleSchema = SchemaFactory.createForClass(Sale);
