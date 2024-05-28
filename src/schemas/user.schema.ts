@@ -25,8 +25,8 @@ export class User {
   @Prop({ trim: true, required: true })
   documentNumber: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Ubigeo', required: true })
-  ubigeo: ObjectId;
+  @Prop({ trim: true, required: true})
+  ubigeo: string;
 
   @Prop({ trim: true, required: true })
   address: string;

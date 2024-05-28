@@ -52,6 +52,13 @@ export class SaleController {
     return sale;
   }
 
+  @Get("/email/:email")
+  async findbyEmail(@Param("email") email: string) {
+    const sale = await this.saleService.findbyEmail(email);
+    if (!sale) throw new NotFoundException("Not sales found!");
+    return sale;
+  }
+
   @Get("/uid/:uuid")
   async findbyUID(@Param("uuid") uuid: string) {
     const sale = await this.saleService.findbyUID(uuid);
