@@ -35,9 +35,9 @@ export class CreateUserDto {
     description: "Reference to Ubigeo document",
     required: true,
   })
-  @IsMongoId()
+  @IsString()
   @IsNotEmpty()
-  ubigeo: ObjectId;
+  ubigeo: string;
 
   @IsString()
   @IsNotEmpty()
