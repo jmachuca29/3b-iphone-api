@@ -7,6 +7,7 @@ import {
   HttpCode,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Put,
 } from "@nestjs/common";
@@ -14,7 +15,9 @@ import { SaleService } from "./sale.service";
 import { CreateSaleDto } from "src/dto/create-sale.dto";
 import { UpdateSaleDto } from "src/dto/update-sale.dto";
 import { ProductService } from "src/product/product.service";
-import { v4 as uuidv4 } from 'uuid';
+import { generate } from 'short-uuid';
+import { SaleStatus } from "src/constant/sale";
+import { UpdateSaleStatusDto } from "src/dto/update-sale-status.dto";
 
 @Controller("sale")
 export class SaleController {
@@ -34,7 +37,7 @@ export class SaleController {
       const product: CreateSaleDto = {
         ...body,
         price: productPrice,
-        uuid: uuidv4()
+        uuid: generate()
       }
       return await this.saleService.create(product);
     } catch (error) {
@@ -77,6 +80,13 @@ export class SaleController {
   @Put(":id")
   async update(@Param("id") id: string, @Body() body: UpdateSaleDto) {
     const sale = await this.saleService.update(id, body);
+    if (!sale) throw new NotFoundException("Sale does not exist!");
+    return sale;
+  }
+
+  @Patch(":id")
+  async updateState(@Param("id") id: string, @Body() body: UpdateSaleStatusDto) {
+    const sale = await this.saleService.updateState(id, body);
     if (!sale) throw new NotFoundException("Sale does not exist!");
     return sale;
   }
