@@ -16,7 +16,6 @@ import { CreateSaleDto } from "src/dto/create-sale.dto";
 import { UpdateSaleDto } from "src/dto/update-sale.dto";
 import { ProductService } from "src/product/product.service";
 import { generate } from 'short-uuid';
-import { SaleStatus } from "src/constant/sale";
 import { UpdateSaleStatusDto } from "src/dto/update-sale-status.dto";
 
 @Controller("sale")
@@ -31,14 +30,23 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
-      const productId = { ...body }.product.toString()
+      const productId = { ...body }?.productId?.toString() || ''
       const grade = { ...body }.grade.toString()
-      const productPrice = await this.productService.findProductPrice(productId, grade)
-      const product: CreateSaleDto = {
-        ...body,
-        price: productPrice,
-        uuid: generate()
+      let product: CreateSaleDto = null
+      if (productId !== '') {
+        const productPrice = await this.productService.findProductPrice(productId, grade)
+        product = {
+          ...body,
+          price: productPrice,
+          uuid: generate()
+        }
+      } else {
+        product = {
+          ...body,
+          uuid: generate()
+        }
       }
+
       return await this.saleService.create(product);
     } catch (error) {
       if (error.code === 11000) {

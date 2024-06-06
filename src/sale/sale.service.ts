@@ -11,7 +11,7 @@ import { Sale } from "src/schemas/sale.schema";
 export class SaleService {
   constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>) { }
 
-  async create(createSaleDto: CreateSaleDto): Promise<any> {
+  async create(createSaleDto: CreateSaleDto): Promise<Sale> {
     const createdSale = new this.saleModel(createSaleDto);
     return createdSale.save();
   }
@@ -24,16 +24,12 @@ export class SaleService {
     return this.saleModel.findById(id).exec();
   }
 
-  async findbyEmail(email: string): Promise<any> {
+  async findbyEmail(email: string): Promise<Sale[]> {
     return this.saleModel.find({ 'user.email': email }).exec();
   }
 
   async findbyUID(uuid: string): Promise<Sale> {
     return this.saleModel.findOne({ 'uuid': uuid })
-      .populate({
-        path: 'product',
-        select: '-prices'
-      })
       .populate('capacity')
       .exec();
   }

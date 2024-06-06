@@ -1,17 +1,47 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, Length, ValidateNested } from "class-validator";
 import { ObjectId } from "mongoose";
 import { Accesories } from "src/constant/accesories";
-import { SaleStatus } from "src/constant/sale";
+import { Type } from 'class-transformer';
+
+export class UserDTO {
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  lastName: string;
+
+  @IsString()
+  @IsOptional()
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  phoneNumber: string;
+
+  @IsString()
+  @IsOptional()
+  ubigeo: string;
+
+  @IsString()
+  @IsOptional()
+  address: string;
+}
 
 export class UpdateSaleDto {
   @ApiProperty({
-    description: "Reference to Capacity document",
+    description: "Reference to Product document",
     required: true,
   })
   @IsMongoId()
   @IsOptional()
-  product: ObjectId;
+  productId: ObjectId;
+
+  @IsString()
+  @IsOptional()
+  productName: string;
 
   @ApiProperty({
     description: "Reference to Capacity document",
@@ -21,8 +51,9 @@ export class UpdateSaleDto {
   @IsOptional()
   capacity: ObjectId;
 
-  @IsEnum(Accesories)
-  accesories: string;
+  @IsArray()
+  @IsEnum(Accesories, { each: true })
+  accesories: Accesories[];
 
   @IsString()
   @IsOptional()
@@ -30,11 +61,11 @@ export class UpdateSaleDto {
 
   @IsString()
   @IsOptional()
-  imei_1: string;
+  firstImei: string;
 
   @IsString()
   @IsOptional()
-  imei_2: string;
+  secondImei: string;
 
   @ApiProperty({
     description: "Reference to PaymentType document",
@@ -52,22 +83,25 @@ export class UpdateSaleDto {
   @IsOptional()
   grade: ObjectId;
 
-  @IsInt()
+  @ValidateNested()
+  @Type(() => UserDTO)
   @IsOptional()
-  battery: number;
-
-  @ApiProperty({
-    description: "Reference to User document",
-    required: true,
-  })
-  @IsMongoId()
-  @IsOptional()
-  user: ObjectId;
+  user: UserDTO;
 
   @IsNumber()
   @IsOptional()
   price: number;
 
-  @IsEnum(SaleStatus)
-  status: string;
+  @IsString()
+  @IsOptional()
+  uuid: string;
+
+  @IsString()
+  @IsOptional()
+  bankEntity: string;
+
+  @IsString()
+  @IsOptional()
+  numberAccount: string;
+
 }
