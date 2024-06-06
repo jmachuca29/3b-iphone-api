@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, Length, ValidateNested } from "class-validator";
 import { ObjectId } from "mongoose";
 import { Accesories } from "src/constant/accesories";
 import { Type } from 'class-transformer';
@@ -11,7 +11,7 @@ export class UserDTO {
 
   @IsString()
   @IsNotEmpty()
-  last_name: string;
+  lastName: string;
 
   @IsString()
   @IsNotEmpty()
@@ -19,7 +19,7 @@ export class UserDTO {
 
   @IsString()
   @IsNotEmpty()
-  cellphone: string;
+  phoneNumber: string;
 
   @IsString()
   @IsNotEmpty()
@@ -32,12 +32,16 @@ export class UserDTO {
 
 export class CreateSaleDto {
   @ApiProperty({
-    description: "Reference to Capacity document",
+    description: "Reference to Product document",
     required: true,
   })
   @IsMongoId()
   @IsNotEmpty()
-  product: ObjectId;
+  productId: ObjectId;
+
+  @IsString()
+  @IsNotEmpty()
+  productName: string;
 
   @ApiProperty({
     description: "Reference to Capacity document",
@@ -57,11 +61,11 @@ export class CreateSaleDto {
 
   @IsString()
   @IsNotEmpty()
-  imei_1: string;
+  firstImei: string;
 
   @IsString()
   @IsNotEmpty()
-  imei_2: string;
+  secondImei: string;
 
   @ApiProperty({
     description: "Reference to PaymentType document",
@@ -79,6 +83,7 @@ export class CreateSaleDto {
   @IsNotEmpty()
   grade: ObjectId;
 
+  @ValidateNested()
   @Type(() => UserDTO)
   @IsNotEmpty()
   user: UserDTO;

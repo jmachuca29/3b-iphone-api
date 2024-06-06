@@ -14,9 +14,6 @@ export class Product {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Capacity' })
   capacity: Capacity;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Color' })
-  color: Color;
-
   @Prop({ trim: true })
   imageUrl: string;
 
