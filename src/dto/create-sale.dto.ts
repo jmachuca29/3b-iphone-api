@@ -22,7 +22,7 @@ export class UserDTO {
   phoneNumber: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   ubigeo: string;
 
   @IsString()
@@ -36,7 +36,7 @@ export class CreateSaleDto {
     required: true,
   })
   @IsMongoId()
-  @IsNotEmpty()
+  @IsOptional()
   productId: ObjectId;
 
   @IsString()

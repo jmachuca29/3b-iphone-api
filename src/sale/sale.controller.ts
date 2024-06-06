@@ -30,14 +30,23 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
-      const productId = { ...body }.productId.toString()
+      const productId = { ...body }?.productId?.toString() || ''
       const grade = { ...body }.grade.toString()
-      const productPrice = await this.productService.findProductPrice(productId, grade)
-      const product: CreateSaleDto = {
-        ...body,
-        price: productPrice,
-        uuid: generate()
+      let product: CreateSaleDto = null
+      if (productId !== '') {
+        const productPrice = await this.productService.findProductPrice(productId, grade)
+        product = {
+          ...body,
+          price: productPrice,
+          uuid: generate()
+        }
+      } else {
+        product = {
+          ...body,
+          uuid: generate()
+        }
       }
+
       return await this.saleService.create(product);
     } catch (error) {
       if (error.code === 11000) {

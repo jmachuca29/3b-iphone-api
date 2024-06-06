@@ -23,7 +23,7 @@ export class User {
   @Prop({ trim: true, required: true })
   phoneNumber: string;
 
-  @Prop({ trim: true, required: true })
+  @Prop({ trim: true, required: false })
   ubigeo: string;
 
   @Prop({ trim: true, required: true })
