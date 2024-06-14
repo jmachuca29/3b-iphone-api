@@ -4,31 +4,14 @@ const SibApiV3Sdk = require("@getbrevo/brevo");
 
 @Injectable()
 export class EmailService {
-  constructor() {
-    // let apiInstance = new SibApiV3Sdk.AccountApi();
-    // apiInstance.setApiKey(
-    //     SibApiV3Sdk.AccountApiApiKeys.apiKey,
-    //   "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"
-    // );
-    // apiInstance.getAccount().then(
-    //   function (data) {
-    //     console.log(
-    //       "API called successfully. Returned data: " + JSON.stringify(data)
-    //     );
-    //   },
-    //   function (error) {
-    //     console.error(error);
-    //   }
-    // );
-  }
+  constructor() {}
 
   async sendEmail(): Promise<any> {
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
     return new Promise<any>((resolve, reject) => {
       let apiKey = apiInstance.authentications["apiKey"];
-      apiKey.apiKey =
-        "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";
+      apiKey.apiKey = process.env.BREVO_API_KEY;
 
       let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
