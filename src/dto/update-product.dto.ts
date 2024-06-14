@@ -1,7 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ObjectId } from 'mongoose';
+
+class ImageDTO {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  url: string;
+}
+
 
 export class UpdateProductDto {
   @ApiProperty({ description: 'Description of the product', required: true })
@@ -17,14 +28,10 @@ export class UpdateProductDto {
   @IsOptional()
   capacity: ObjectId;
 
-  @ApiProperty({ description: 'Reference to Color document', required: true })
-  @IsString()
+  @ValidateNested()
+  @Type(() => ImageDTO)
   @IsOptional()
-  color: ObjectId;
-
-  @ApiProperty({ description: 'URL of the product image' })
-  @IsString()
-  imageUrl: string;
+  image: ImageDTO;
 
   @ApiProperty({
     description: 'Array of prices for different grades',
