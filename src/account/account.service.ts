@@ -25,6 +25,10 @@ export class AccountService {
     return this.accountModel.findById(id).exec();
   }
 
+  async findByEmailAndRole(email: string, role: any): Promise<any> {
+    return this.accountModel.findOne({ email, role }).populate('password').exec();
+  }
+
   async delete(id: string): Promise<Account> {
     return this.accountModel.findByIdAndDelete(id);
   }

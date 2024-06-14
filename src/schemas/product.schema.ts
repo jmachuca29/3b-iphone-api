@@ -4,6 +4,17 @@ import { Capacity } from './capacity.schema';
 import { Color } from './color.schema';
 import { Grade } from './grade.schema';
 
+@Schema()
+class Image {
+  @Prop({ trim: true, required: true })
+  name: string;
+
+  @Prop({ trim: true, required: true })
+  url: string;
+}
+
+const ImageSchema = SchemaFactory.createForClass(Image);
+
 export type ProductDocument = HydratedDocument<Product>;
 
 @Schema()
@@ -14,8 +25,8 @@ export class Product {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Capacity' })
   capacity: Capacity;
 
-  @Prop({ trim: true })
-  imageUrl: string;
+  @Prop({ type: ImageSchema, required: false })
+  image: Image;
 
   @Prop([
     {
