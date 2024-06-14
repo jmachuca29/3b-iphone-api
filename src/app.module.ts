@@ -13,6 +13,7 @@ import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
 import { UbigeoModule } from './ubigeo/ubigeo.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UbigeoModule } from './ubigeo/ubigeo.module';
     AccountModule,
     AuthModule,
     UbigeoModule,
+    EmailModule,
     MongooseModule.forRoot(process.env.DB),
   ],
   controllers: [],
