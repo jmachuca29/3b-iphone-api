@@ -16,9 +16,9 @@ import { CreateAccountDto } from "src/dto/create-account.dto";
 import { UpdateAccountDto } from "src/dto/update-account.dto";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
-import { CreateUserDto } from "src/dto/create-user.dto";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { CreateUserAccountDto } from "src/dto/create-user-account.dto";
+import { Role } from "src/schemas/account.schema";
 
 @Controller("account")
 export class AccountController {
@@ -51,11 +51,40 @@ export class AccountController {
         email: email,
         password: hash,
         user: newUser._id,
+        role: Role.User
       };
       const accountDB: any = await this.accountService.create(account);
       return accountDB;
 
     } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException("Account already exists");
+      }
+      throw error;
+    }
+  }
+
+    @Post("/admin")
+  async createAWithRole(@Body() body: CreateAccountDto) {
+    try {
+      const email = body.email;
+      const user = await this.accountService.findByEmailAndRole(email, Role.Admin);
+      if (user) {
+        throw new ConflictException("Lo sentimos este usuario ya existe");
+      }
+      //Encriptar Contraseña
+      const salt = bcrypt.genSaltSync();
+      const hash = bcrypt.hashSync(body.password, salt);
+      const account = {
+        email: email,
+        password: hash,
+        role: Role.Admin
+      };
+      const accountDB: any = await this.accountService.create(account);
+      return accountDB
+
+    } catch (error) {
+      console.log(error)
       if (error.code === 11000) {
         throw new ConflictException("Account already exists");
       }

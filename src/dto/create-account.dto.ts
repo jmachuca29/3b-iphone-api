@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { ObjectId } from "mongoose";
+import { Role } from "src/schemas/account.schema";
 
 export class CreateAccountDto {
 
@@ -17,7 +18,11 @@ export class CreateAccountDto {
     required: true,
   })
   @IsMongoId()
-  @IsNotEmpty()
-  user: ObjectId;
+  @IsOptional()
+  user?: ObjectId;
+
+  @IsEnum(Role)
+  @IsOptional()
+  role?: number;
   
 }

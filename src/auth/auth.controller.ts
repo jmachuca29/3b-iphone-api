@@ -18,8 +18,12 @@ export class AuthController {
   
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-    console.log('signInDto', signInDto)
     return this.authService.signIn(signInDto.username, signInDto.password);
+  }
+
+  @Post('admin')
+  signInAdmin(@Body() signInDto: Record<string, any>) {
+    return this.authService.signInAdmin(signInDto.username, signInDto.password);
   }
 
   @UseGuards(AuthGuard)
