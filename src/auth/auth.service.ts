@@ -19,7 +19,7 @@ export class AuthService {
     username: string,
     pass: string
   ): Promise<{ access_token: string }> {
-    const user = await this.accountService.findByEmail(username);
+    const user = await this.accountService.findByEmail(username, Role.User);
     if(!user) {
       throw new ConflictException("User / Password not valid");
     }

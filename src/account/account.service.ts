@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { CreateAccountDto } from "src/dto/create-account.dto";
 import { UpdateAccountDto } from "src/dto/update-account.dto";
-import { Account } from "src/schemas/account.schema";
+import { Account, Role } from "src/schemas/account.schema";
 
 @Injectable()
 export class AccountService {
@@ -25,7 +25,7 @@ export class AccountService {
     return this.accountModel.findById(id).exec();
   }
 
-  async findByEmailAndRole(email: string, role: any): Promise<any> {
+  async findByEmailAndRole(email: string, role: Role): Promise<any> {
     return this.accountModel.findOne({ email, role }).populate('password').exec();
   }
 
@@ -42,7 +42,7 @@ export class AccountService {
     });
   }
 
-  async findByEmail(email: string): Promise<Account> {
-    return this.accountModel.findOne({ email }).populate('password').exec();
+  async findByEmail(email: string, role: Role): Promise<any> {
+    return this.accountModel.findOne({ email, role: role }).populate('password').exec();
   }
 }
