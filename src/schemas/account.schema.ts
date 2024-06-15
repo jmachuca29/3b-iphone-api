@@ -22,7 +22,7 @@ export class Account {
   user: User;
 
   @Prop({ enum: Role, default: Role.User, required: false })
-  role: string;
+  role: Role;
   
 }
 
