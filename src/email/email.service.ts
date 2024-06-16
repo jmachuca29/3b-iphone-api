@@ -15,16 +15,13 @@ export class EmailService {
 
       let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-      sendSmtpEmail.templateId = 1;
-      sendSmtpEmail.params = {
-        "subject": "Custom Subject 22",
-      };
-      sendSmtpEmail.subject = "My {{params.subject}}";
+      sendSmtpEmail.templateId = 2;
+      // sendSmtpEmail.subject = `My {{params.ORDER}} 22`;
       //   sendSmtpEmail.htmlContent =
       //     "<html><body><h1>This is my first transactional email {{params.parameter}}</h1></body></html>";
       sendSmtpEmail.sender = {
-        name: "Joe Machuca",
-        email: "jmachucapaulino29@gmail.com",
+        name: "3BIphone TestEmail",
+        email: "paul.vega@3biphones.com",
       };
       sendSmtpEmail.to = [{ email: "paulmax951@gmail.com", name: "Paul Vega" }];
       // sendSmtpEmail.cc = [{ email: "example2@example2.com", name: "Janice Doe" }];
@@ -32,8 +29,12 @@ export class EmailService {
       // sendSmtpEmail.replyTo = { email: "replyto@domain.com", name: "John Doe" };
       sendSmtpEmail.headers = { "Some-Custom-Name": "unique-id-1234" };
       sendSmtpEmail.params = {
-        parameter: "My param value",
-        subject: "New Subject",
+        NAMES: [
+          { username: "Juan" },
+          { username: "Jhon" },
+          { username: "Carlos" },
+        ],
+        ORDER: "999",
       };
 
       apiInstance.sendTransacEmail(sendSmtpEmail).then(
