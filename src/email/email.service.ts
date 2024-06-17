@@ -1,17 +1,13 @@
 import { Injectable } from "@nestjs/common";
-// import * as SibApiV3Sdk from "@getbrevo/brevo";
 import * as PDFDocument from "pdfkit"
-const fs = require('fs');
-const path = require('path');
+import { Sale } from "src/schemas/sale.schema";
 const SibApiV3Sdk = require("@getbrevo/brevo");
-// const PDFDocument = require('pdfkit');
-
 
 @Injectable()
 export class EmailService {
   constructor() {}
 
-  async sendEmail(): Promise<any> {
+  async sendEmail(sale: Sale, host: string): Promise<any> {
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
     return new Promise<any>((resolve, reject) => {
@@ -21,25 +17,21 @@ export class EmailService {
       let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
       sendSmtpEmail.templateId = 2;
-      // sendSmtpEmail.subject = `My {{params.ORDER}} 22`;
-      //   sendSmtpEmail.htmlContent =
-      //     "<html><body><h1>This is my first transactional email {{params.parameter}}</h1></body></html>";
       sendSmtpEmail.sender = {
         name: "3BIphone TestEmail",
         email: "paul.vega@3biphones.com",
       };
       sendSmtpEmail.to = [{ email: "paulmax951@gmail.com", name: "Paul Vega" }];
-      // sendSmtpEmail.cc = [{ email: "example2@example2.com", name: "Janice Doe" }];
-      // sendSmtpEmail.bcc = [{ name: "John Doe", email: "example@example.com" }];
-      // sendSmtpEmail.replyTo = { email: "replyto@domain.com", name: "John Doe" };
-      sendSmtpEmail.headers = { "Some-Custom-Name": "unique-id-1234" };
+      sendSmtpEmail.replyTo = { email: "paul.vega@3biphones.com", name: "3BIphone TestEmail" };
       sendSmtpEmail.params = {
-        NAMES: [
-          { username: "Juan" },
-          { username: "Jhon" },
-          { username: "Carlos" },
-        ],
-        ORDER: "999",
+        NAME: sale?.user?.name || 'Estimad@',
+        ORDER: sale?.uuid,
+        ADDRESS: sale?.user?.address,
+        PRODUCTNAME: sale?.productName,
+        CAPACITY: sale?.capacity,
+        PRICE: sale?.price,
+        DATE: sale?.createdAt,
+        APIURL: `${host}/api/email/pdf/${sale['_id']}`
       };
 
       apiInstance.sendTransacEmail(sendSmtpEmail).then(
@@ -55,7 +47,7 @@ export class EmailService {
     });
   }
 
-  async generatePDF(): Promise<Buffer> {
+  async generatePDF(sale: Sale): Promise<Buffer> {
     const pdfBuffer: Buffer = await new Promise(resolve => {
       const doc = new PDFDocument({
         size: 'A5',
@@ -138,11 +130,11 @@ export class EmailService {
         .font(textStyle.font)
         .fontSize(textStyle.fontSize)
         .fillColor(textStyle.color)
-        .text('NRO DE ORDEN: XXXXXXXXXXXXXXXXX', { align: 'left' })
+        .text(`NRO DE ORDEN: ${sale?.uuid}`, { align: 'left' })
         .moveDown()
-        .text('NOMBRES Y APELLIDOS: (DE LA ORDEN)', { align: 'left' })
+        .text(`NOMBRES Y APELLIDOS: ${sale?.user?.name + ' ' + sale?.user?.lastName}`, { align: 'left' })
         .moveDown()
-        .text('NRO DE CELULAR: (DE LA ORDEN)', { align: 'left' })
+        .text(`NRO DE CELULAR: ${sale?.user?.phoneNumber}`, { align: 'left' })
         .moveDown();
   
       doc.end();

@@ -9,7 +9,7 @@ import { ProductService } from './product.service';
     MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
   ],
   exports: [
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+    ProductService
   ],
   controllers: [ProductController],
   providers: [ProductService],
