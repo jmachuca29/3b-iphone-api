@@ -10,6 +10,8 @@ import {
   Patch,
   Post,
   Put,
+  Req,
+  Headers
 } from "@nestjs/common";
 import { SaleService } from "./sale.service";
 import { CreateSaleDto } from "src/dto/create-sale.dto";
@@ -28,8 +30,12 @@ export class SaleController {
   }
 
   @Post()
-  async create(@Body() body: CreateSaleDto) {
+  async create(@Body() body: CreateSaleDto, @Headers() headers: Headers) {
     try {
+      console.log(headers);
+      return new Promise((resolve, reject) => {
+        resolve('Hola mundo')
+      })
       const productId = { ...body }?.productId?.toString() || ''
       const grade = { ...body }.grade.toString()
       let product: CreateSaleDto = null
