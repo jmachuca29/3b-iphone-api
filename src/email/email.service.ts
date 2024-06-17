@@ -9,7 +9,6 @@ export class EmailService {
 
   async sendEmail(sale: Sale, host: string): Promise<any> {
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-
     return new Promise<any>((resolve, reject) => {
       let apiKey = apiInstance.authentications["apiKey"];
       apiKey.apiKey = process.env.BREVO_API_KEY;
@@ -21,7 +20,7 @@ export class EmailService {
         name: "3BIphone TestEmail",
         email: "paul.vega@3biphones.com",
       };
-      sendSmtpEmail.to = [{ email: "paulmax951@gmail.com", name: "Paul Vega" }];
+      sendSmtpEmail.to = [{ email: sale?.user?.email, name: sale?.user?.name + ' ' + sale?.user?.lastName }];
       sendSmtpEmail.replyTo = { email: "paul.vega@3biphones.com", name: "3BIphone TestEmail" };
       sendSmtpEmail.params = {
         NAME: sale?.user?.name || 'Estimad@',
