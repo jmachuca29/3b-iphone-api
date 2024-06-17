@@ -80,6 +80,9 @@ export class Sale {
 
   @Prop({ required: true })
   numberAccount: string;
+
+  @Prop()
+  createdAt: string;
 }
 
 export const SaleSchema = SchemaFactory.createForClass(Sale);

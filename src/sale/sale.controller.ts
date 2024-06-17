@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Put,
+  Req
 } from "@nestjs/common";
 import { SaleService } from "./sale.service";
 import { CreateSaleDto } from "src/dto/create-sale.dto";
@@ -17,10 +18,11 @@ import { UpdateSaleDto } from "src/dto/update-sale.dto";
 import { ProductService } from "src/product/product.service";
 import { generate } from 'short-uuid';
 import { UpdateSaleStatusDto } from "src/dto/update-sale-status.dto";
+import { EmailService } from "src/email/email.service";
 
 @Controller("sale")
 export class SaleController {
-  constructor(private saleService: SaleService, private productService: ProductService) { }
+  constructor(private saleService: SaleService, private productService: ProductService, private emailService: EmailService) { }
 
   @Get()
   findAll() {
@@ -28,26 +30,28 @@ export class SaleController {
   }
 
   @Post()
-  async create(@Body() body: CreateSaleDto) {
+  async create(@Body() body: CreateSaleDto, @Req() request: Request) {
     try {
+      const host = request.headers['host'];
       const productId = { ...body }?.productId?.toString() || ''
       const grade = { ...body }.grade.toString()
-      let product: CreateSaleDto = null
+      let sale: CreateSaleDto = null
       if (productId !== '') {
         const productPrice = await this.productService.findProductPrice(productId, grade)
-        product = {
+        sale = {
           ...body,
           price: productPrice,
           uuid: generate()
         }
       } else {
-        product = {
+        sale = {
           ...body,
           uuid: generate()
         }
       }
-
-      return await this.saleService.create(product);
+      const saleDB = await this.saleService.create(sale);
+      this.emailService.sendEmail(saleDB, host)
+      return saleDB
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException("Sale already exists");
