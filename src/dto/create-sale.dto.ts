@@ -22,8 +22,16 @@ export class UserDTO {
   phoneNumber: string;
 
   @IsString()
-  @IsOptional()
-  ubigeo: string;
+  @IsNotEmpty()
+  department: string;
+
+  @IsString()
+  @IsNotEmpty()
+  province: string;
+
+  @IsString()
+  @IsNotEmpty()
+  district: string;
 
   @IsString()
   @IsNotEmpty()

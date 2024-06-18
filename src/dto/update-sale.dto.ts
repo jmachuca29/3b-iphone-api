@@ -23,7 +23,15 @@ export class UserDTO {
 
   @IsString()
   @IsOptional()
-  ubigeo: string;
+  department: string;
+
+  @IsString()
+  @IsOptional()
+  province: string;
+
+  @IsString()
+  @IsOptional()
+  district: string;
 
   @IsString()
   @IsOptional()

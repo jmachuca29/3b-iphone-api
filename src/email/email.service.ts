@@ -25,6 +25,9 @@ export class EmailService {
       sendSmtpEmail.params = {
         NAME: sale?.user?.name || 'Estimad@',
         ORDER: sale?.uuid,
+        DEPARTMENT: sale?.user?.department,
+        PROVINCE: sale?.user?.province,
+        DISTRICT: sale?.user?.district,
         ADDRESS: sale?.user?.address,
         PRODUCTNAME: sale?.productName,
         CAPACITY: sale?.capacity,
