@@ -27,6 +27,10 @@ export class SaleService {
     return this.saleModel.find({ 'user.email': email }).exec();
   }
 
+  async findAllbyAccount(id: string): Promise<Sale[]> {
+    return this.saleModel.find({ 'userId': id }).sort({createdAt: -1}).exec();
+  }
+
   async findbyUID(uuid: string): Promise<Sale> {
     return this.saleModel.findOne({ 'uuid': uuid })
       .populate('capacity')

@@ -13,16 +13,6 @@ import { SaleService } from 'src/sale/sale.service';
 export class EmailController {
   constructor(private emailService: EmailService, private saleService: SaleService) { }
 
-  @Post()
-  async sendEmail() {
-    try {
-      return null
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
   @Get("/pdf/:id")
   async getPDF(
     @Param("id") id: any,
