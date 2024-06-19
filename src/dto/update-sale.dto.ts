@@ -39,6 +39,11 @@ export class UserDTO {
 }
 
 export class UpdateSaleDto {
+
+  @IsMongoId()
+  @IsOptional()
+  userId: ObjectId;
+
   @ApiProperty({
     description: "Reference to Product document",
     required: true,

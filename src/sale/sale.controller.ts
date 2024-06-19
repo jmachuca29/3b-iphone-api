@@ -75,6 +75,13 @@ export class SaleController {
     return sale;
   }
 
+  @Get("/account/:id")
+  async findAllbyAccount(@Param("id") id: string) {
+    const sale = await this.saleService.findAllbyAccount(id);
+    if (!sale) throw new NotFoundException("Not sales found!");
+    return sale;
+  }
+
   @Get("/uid/:uuid")
   async findbyUID(@Param("uuid") uuid: string) {
     const sale = await this.saleService.findbyUID(uuid);

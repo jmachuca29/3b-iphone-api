@@ -7,6 +7,7 @@ import { PaymentType } from './payment-type';
 import { Accesories } from 'src/constant/accesories';
 import { SaleStatus } from 'src/constant/sale';
 import { Product } from './product.schema';
+import { User as UserExternal } from './user.schema';
 import sequenceGenerator from 'src/utils/correlative';
 
 @Schema()
@@ -40,6 +41,10 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 @Schema({ timestamps: true })
 export class Sale {
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: false })
+  userId: UserExternal;
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Product', required: false })
   productId: Product;
 
