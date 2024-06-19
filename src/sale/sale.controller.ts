@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Patch,
@@ -101,5 +102,10 @@ export class SaleController {
     const sale = await this.saleService.updateState(id, body);
     if (!sale) throw new NotFoundException("Sale does not exist!");
     return sale;
+  }
+
+  @Post('reset-correlative')
+  async resetCorrelativeCounter(): Promise<void> {
+    await this.saleService.resetCorrelativeCounter();
   }
 }

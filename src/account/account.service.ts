@@ -26,7 +26,7 @@ export class AccountService {
   }
 
   async findByEmailAndRole(email: string, role: Role): Promise<any> {
-    return this.accountModel.findOne({ email, role }).populate('password').exec();
+    return this.accountModel.findOne({ email, role }).populate('user').populate('password').exec();
   }
 
   async delete(id: string): Promise<Account> {

@@ -31,13 +31,17 @@ export class UpdateUserDto {
   @IsOptional()
   documentNumber: string;
 
-  @ApiProperty({
-    description: "Reference to Ubigeo document",
-    required: true,
-  })
-  @IsMongoId()
+  @IsString()
   @IsOptional()
-  ubigeo: ObjectId;
+  department: string;
+
+  @IsString()
+  @IsOptional()
+  province: string;
+
+  @IsString()
+  @IsOptional()
+  district: string;
 
   @IsString()
   @IsOptional()

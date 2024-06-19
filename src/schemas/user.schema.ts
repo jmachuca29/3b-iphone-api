@@ -26,7 +26,13 @@ export class User {
   documentNumber: string;
 
   @Prop({ trim: true, required: true})
-  ubigeo: string;
+  department: string;
+
+  @Prop({ trim: true, required: true})
+  province: string;
+
+  @Prop({ trim: true, required: true})
+  district: string;
 
   @Prop({ trim: true, required: true })
   address: string;

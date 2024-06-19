@@ -33,13 +33,17 @@ export class CreateUserAccountDto {
   @IsNotEmpty()
   documentNumber: string;
 
-  @ApiProperty({
-    description: "Reference to Ubigeo document",
-    required: true,
-  })
   @IsString()
   @IsNotEmpty()
-  ubigeo: string;
+  department: string;
+
+  @IsString()
+  @IsNotEmpty()
+  province: string;
+
+  @IsString()
+  @IsNotEmpty()
+  district: string;
 
   @IsString()
   @IsNotEmpty()

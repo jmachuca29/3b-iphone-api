@@ -19,15 +19,16 @@ export class AuthService {
     username: string,
     pass: string
   ): Promise<{ access_token: string }> {
-    const user = await this.accountService.findByEmail(username, Role.User);
-    if(!user) {
+    const account = await this.accountService.findByEmailAndRole(username, Role.User);
+    if(!account) {
       throw new ConflictException("User / Password not valid");
     }
-    const validPassword = bcrypt.compareSync(pass, user.password);
+    const validPassword = bcrypt.compareSync(pass, account.password);
     if (!validPassword) {
       throw new ConflictException("User / Password not valid");
     }
-    const payload = { sub: user.user, username: user.email };
+
+    const payload = { id: account?.user?._id ,name: account?.user?.name, lastName: account?.user?.lastName, email: account?.user?.email };
     return {
       access_token: await this.jwtService.signAsync(payload, { secret: process.env.JWT_SECRET }),
     };
@@ -37,15 +38,15 @@ export class AuthService {
     username: string,
     pass: string
   ): Promise<{ access_token: string }> {
-    const user = await this.accountService.findByEmailAndRole(username, Role.Admin);
-    if(!user) {
+    const account = await this.accountService.findByEmailAndRole(username, Role.Admin);
+    if(!account) {
       throw new ConflictException("User / Password not valid");
     }
-    const validPassword = bcrypt.compareSync(pass, user.password);
+    const validPassword = bcrypt.compareSync(pass, account.password);
     if (!validPassword) {
       throw new ConflictException("User / Password not valid");
     }
-    const payload = { sub: user.user, username: user.email };
+    const payload = { name: account?.user?.name, lastName: account?.user?.lastName, email: account?.user?.email };
     return {
       access_token: await this.jwtService.signAsync(payload, { secret: process.env.JWT_SECRET }),
     };

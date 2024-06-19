@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { SaleStatus } from "src/constant/sale";
+import { InjectConnection, InjectModel } from "@nestjs/mongoose";
+import { Connection, Model } from "mongoose";
 import { CreateSaleDto } from "src/dto/create-sale.dto";
 import { UpdateSaleStatusDto } from "src/dto/update-sale-status.dto";
 import { UpdateSaleDto } from "src/dto/update-sale.dto";
@@ -9,7 +8,7 @@ import { Sale } from "src/schemas/sale.schema";
 
 @Injectable()
 export class SaleService {
-  constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>) { }
+  constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>, @InjectConnection() private readonly connection: Connection) { }
 
   async create(createSaleDto: CreateSaleDto): Promise<Sale> {
     const createdSale = new this.saleModel(createSaleDto);
@@ -17,7 +16,7 @@ export class SaleService {
   }
 
   async findAll(): Promise<Sale[]> {
-    return this.saleModel.find().exec();
+    return this.saleModel.find().sort({createdAt: -1}).exec();
   }
 
   async findOne(id: string): Promise<Sale> {
@@ -46,6 +45,15 @@ export class SaleService {
   async updateState(id: string, updateSaleStatusDto: UpdateSaleStatusDto): Promise<Sale> {
     const status = updateSaleStatusDto.status
     return this.saleModel.findByIdAndUpdate(id, { status: status }, { new: true });
+  }
+
+  async resetCorrelativeCounter(): Promise<void> {
+    const countersCollection = this.connection.collection('counters');
+    await countersCollection.updateOne(
+      { id: 'sale_sequence' },
+      { $set: { seq: 0 } },
+      { upsert: true }
+    );
   }
 
 }
