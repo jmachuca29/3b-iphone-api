@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { Connection, Schema as MongooseSchema } from 'mongoose';
+import { InjectConnection } from '@nestjs/mongoose';
 import { Capacity } from './capacity.schema';
 import { Grade } from './grade.schema';
 import { PaymentType } from './payment-type';
 import { Accesories } from 'src/constant/accesories';
 import { SaleStatus } from 'src/constant/sale';
-import { IsEnum } from 'class-validator';
 import { Product } from './product.schema';
-
+import sequenceGenerator from 'src/utils/correlative';
 
 @Schema()
 export class User {
@@ -40,15 +40,13 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 @Schema({ timestamps: true })
 export class Sale {
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: false })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Product', required: false })
   productId: Product;
-
 
   @Prop({ required: true })
   productName: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Capacity', required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Capacity', required: true })
   capacity: Capacity;
 
   @Prop({ type: [String], enum: Object.values(Accesories) })
@@ -63,10 +61,10 @@ export class Sale {
   @Prop({ trim: true, required: true })
   secondImei: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'PaymentType', required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'PaymentType', required: true })
   paymentType: PaymentType;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Grade', required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Grade', required: true })
   grade: Grade;
 
   @Prop({ type: UserSchema, required: true })
@@ -89,6 +87,14 @@ export class Sale {
 
   @Prop()
   createdAt: string;
+
+  @Prop()
+  correlative: number;
 }
 
 export const SaleSchema = SchemaFactory.createForClass(Sale);
+
+export const configureSaleSchema = (connection: Connection) => {
+  const AutoIncrement = sequenceGenerator(connection);
+  SaleSchema.plugin(AutoIncrement, { inc_field: 'correlative', id: 'sale_sequence' });  
+};
