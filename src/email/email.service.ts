@@ -17,11 +17,11 @@ export class EmailService {
 
       sendSmtpEmail.templateId = 2;
       sendSmtpEmail.sender = {
-        name: "3BIphone TestEmail",
-        email: "paul.vega@3biphones.com",
+        name: "3B IPhone",
+        email: "no-responder@3biphones.com",
       };
       sendSmtpEmail.to = [{ email: sale?.user?.email, name: sale?.user?.name + ' ' + sale?.user?.lastName }];
-      sendSmtpEmail.replyTo = { email: "paul.vega@3biphones.com", name: "3BIphone TestEmail" };
+      sendSmtpEmail.replyTo = { email: "no-responder@3biphones.com", name: "3B IPhone" };
       sendSmtpEmail.params = {
         NAME: sale?.user?.name || 'Estimad@',
         ORDER: sale?.correlative,
@@ -33,7 +33,6 @@ export class EmailService {
         CAPACITY: sale?.capacity?.description,
         PRICE: sale?.price,
         DATE: sale?.createdAt,
-        APIURL: `${host}/api/email/pdf/${sale['_id']}`
       };
       sendSmtpEmail.attachment = [{"content": await this.generatePDF(sale), "name":"GUIA_MODELO.pdf"}]
 
@@ -133,7 +132,7 @@ export class EmailService {
         .font(textStyle.font)
         .fontSize(textStyle.fontSize)
         .fillColor(textStyle.color)
-        .text(`NRO DE ORDEN: ${sale?.correlative}`, { align: 'left' })
+        .text(`NRO DE ORDEN: #${sale?.correlative}`, { align: 'left' })
         .moveDown()
         .text(`NOMBRES Y APELLIDOS: ${sale?.user?.name + ' ' + sale?.user?.lastName}`, { align: 'left' })
         .moveDown()
