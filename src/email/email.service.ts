@@ -9,7 +9,7 @@ export class EmailService {
 
   async sendEmail(sale: Sale, host: string): Promise<any> {
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
       let apiKey = apiInstance.authentications["apiKey"];
       apiKey.apiKey = process.env.BREVO_API_KEY;
 
@@ -24,17 +24,18 @@ export class EmailService {
       sendSmtpEmail.replyTo = { email: "paul.vega@3biphones.com", name: "3BIphone TestEmail" };
       sendSmtpEmail.params = {
         NAME: sale?.user?.name || 'Estimad@',
-        ORDER: sale?.uuid,
+        ORDER: sale?.correlative,
         DEPARTMENT: sale?.user?.department,
         PROVINCE: sale?.user?.province,
         DISTRICT: sale?.user?.district,
         ADDRESS: sale?.user?.address,
         PRODUCTNAME: sale?.productName,
-        CAPACITY: sale?.capacity,
+        CAPACITY: sale?.capacity?.description,
         PRICE: sale?.price,
         DATE: sale?.createdAt,
         APIURL: `${host}/api/email/pdf/${sale['_id']}`
       };
+      sendSmtpEmail.attachment = [{"content": await this.generatePDF(sale), "name":"GUIA_MODELO.pdf"}]
 
       apiInstance.sendTransacEmail(sendSmtpEmail).then(
         function (data) {
@@ -49,7 +50,7 @@ export class EmailService {
     });
   }
 
-  async generatePDF(sale: Sale): Promise<Buffer> {
+  async generatePDF(sale: Sale): Promise<string> {
     const pdfBuffer: Buffer = await new Promise(resolve => {
       const doc = new PDFDocument({
         size: 'A5',
@@ -132,7 +133,7 @@ export class EmailService {
         .font(textStyle.font)
         .fontSize(textStyle.fontSize)
         .fillColor(textStyle.color)
-        .text(`NRO DE ORDEN: ${sale?.uuid}`, { align: 'left' })
+        .text(`NRO DE ORDEN: ${sale?.correlative}`, { align: 'left' })
         .moveDown()
         .text(`NOMBRES Y APELLIDOS: ${sale?.user?.name + ' ' + sale?.user?.lastName}`, { align: 'left' })
         .moveDown()
@@ -142,7 +143,7 @@ export class EmailService {
       doc.end();
     });
   
-    return pdfBuffer;
+    return pdfBuffer.toString('base64');
   }
   
 }

@@ -12,11 +12,12 @@ export class SaleService {
 
   async create(createSaleDto: CreateSaleDto): Promise<Sale> {
     const createdSale = new this.saleModel(createSaleDto);
-    return createdSale.save();
+    await createdSale.save();
+    return this.saleModel.findById(createdSale._id).populate('capacity').exec();
   }
 
   async findAll(): Promise<Sale[]> {
-    return this.saleModel.find().sort({createdAt: -1}).exec();
+    return this.saleModel.find().populate('capacity').sort({createdAt: -1}).exec();
   }
 
   async findOne(id: string): Promise<Sale> {

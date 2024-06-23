@@ -3,15 +3,29 @@ import {
   Get,
   Post,
   Res,
-  Param
+  Param,
+  Body,
+  ConflictException,
+  Req
 } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { Response } from 'express';
 import { SaleService } from 'src/sale/sale.service';
+import { Sale } from 'src/schemas/sale.schema';
 
 @Controller('email')
 export class EmailController {
   constructor(private emailService: EmailService, private saleService: SaleService) { }
+
+  @Post()
+  async create(@Body() body: Sale, @Req() request: Request) {
+    try {
+      const host = request.headers['host'];
+      return await this.emailService.sendEmail(body, host);
+    } catch (error) {
+      throw error;
+    }
+  }
 
   @Get("/pdf/:id")
   async getPDF(
