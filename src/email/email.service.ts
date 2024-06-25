@@ -1,13 +1,28 @@
 import { Injectable } from "@nestjs/common";
 import * as PDFDocument from "pdfkit"
 import { Sale } from "src/schemas/sale.schema";
+import * as dayjs from "dayjs";
+import * as utc from "dayjs/plugin/utc";
+import * as timezone from "dayjs/plugin/timezone";
+import * as localizedFormat from "dayjs/plugin/localizedFormat";
+
 const SibApiV3Sdk = require("@getbrevo/brevo");
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(localizedFormat);
+
+const calculateDate = (date: any): string => {
+  const time = dayjs(date);
+  const peruTime = time.tz("America/Lima").format("DD MMMM YYYY hh:mm A");
+  return peruTime;
+};
 
 @Injectable()
 export class EmailService {
   constructor() {}
 
-  async sendEmail(sale: Sale, host: string): Promise<any> {
+  async sendEmail(sale: Sale): Promise<any> {
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     return new Promise<any>(async (resolve, reject) => {
       let apiKey = apiInstance.authentications["apiKey"];
@@ -32,7 +47,7 @@ export class EmailService {
         PRODUCTNAME: sale?.productName,
         CAPACITY: sale?.capacity?.description,
         PRICE: sale?.price,
-        DATE: sale?.createdAt,
+        DATE: calculateDate(sale?.createdAt) || '',
       };
       sendSmtpEmail.attachment = [{"content": await this.generatePDF(sale), "name":"GUIA_MODELO.pdf"}]
 
