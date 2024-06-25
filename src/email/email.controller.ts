@@ -18,10 +18,9 @@ export class EmailController {
   constructor(private emailService: EmailService, private saleService: SaleService) { }
 
   @Post()
-  async create(@Body() body: Sale, @Req() request: Request) {
+  async create(@Body() body: Sale) {
     try {
-      const host = request.headers['host'];
-      return await this.emailService.sendEmail(body, host);
+      return await this.emailService.sendEmail(body);
     } catch (error) {
       throw error;
     }

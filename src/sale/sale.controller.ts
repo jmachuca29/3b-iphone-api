@@ -31,9 +31,8 @@ export class SaleController {
   }
 
   @Post()
-  async create(@Body() body: CreateSaleDto, @Req() request: Request) {
+  async create(@Body() body: CreateSaleDto) {
     try {
-      const host = request.headers['host'];
       const productId = { ...body }?.productId?.toString() || ''
       const grade = { ...body }.grade.toString()
       let sale: CreateSaleDto = null
@@ -51,7 +50,7 @@ export class SaleController {
         }
       }
       const saleDB = await this.saleService.create(sale);
-      this.emailService.sendEmail(saleDB, host)
+      this.emailService.sendEmail(saleDB)
       return saleDB
     } catch (error) {
       if (error.code === 11000) {
