@@ -117,5 +117,13 @@ export class CreateSaleDto {
   @IsNotEmpty()
   numberAccount: string;
 
+  @IsString()
+  @IsNotEmpty()
+  documentType: string;
+
+  @IsString()
+  @IsNotEmpty()
+  documentNumber: string;
+
 }
 
