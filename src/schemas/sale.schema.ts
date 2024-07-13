@@ -4,6 +4,7 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { Capacity } from './capacity.schema';
 import { Grade } from './grade.schema';
 import { PaymentType } from './payment-type';
+import { DocumentType } from './document-type';
 import { Accesories } from 'src/constant/accesories';
 import { SaleStatus } from 'src/constant/sale';
 import { Product } from './product.schema';
@@ -95,6 +96,12 @@ export class Sale {
 
   @Prop()
   correlative: number;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'DocumentType', required: true })
+  documentType: DocumentType;
+
+  @Prop({ required: true })
+  documentNumber: string;
 }
 
 export const SaleSchema = SchemaFactory.createForClass(Sale);

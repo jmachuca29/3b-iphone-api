@@ -117,4 +117,12 @@ export class UpdateSaleDto {
   @IsOptional()
   numberAccount: string;
 
+  @IsString()
+  @IsOptional()
+  documentType: string;
+
+  @IsString()
+  @IsOptional()
+  documentNumber: string;
+
 }
