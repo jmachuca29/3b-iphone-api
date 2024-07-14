@@ -5,7 +5,6 @@ import { Capacity } from './capacity.schema';
 import { Grade } from './grade.schema';
 import { PaymentType } from './payment-type';
 import { DocumentType } from './document-type';
-import { Accesories } from 'src/constant/accesories';
 import { SaleStatus } from 'src/constant/sale';
 import { Product } from './product.schema';
 import { User as UserExternal } from './user.schema';
@@ -55,8 +54,8 @@ export class Sale {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Capacity', required: true })
   capacity: Capacity;
 
-  @Prop({ type: [String], enum: Object.values(Accesories) })
-  accesories: string[];
+  @Prop({ required: true })
+  originalBox: boolean;
 
   @Prop({ trim: true, required: true })
   serieNumber: string;
