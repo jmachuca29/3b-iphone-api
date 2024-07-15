@@ -17,7 +17,7 @@ export class SaleService {
   }
 
   async findAll(): Promise<Sale[]> {
-    return this.saleModel.find().populate('capacity').sort({createdAt: -1}).exec();
+    return this.saleModel.find().populate('capacity').sort({correlative: -1}).exec();
   }
 
   async findOne(id: string): Promise<Sale> {
