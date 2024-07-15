@@ -35,6 +35,7 @@ export class SaleService {
   async findbyUID(uuid: string): Promise<Sale> {
     return this.saleModel.findOne({ 'uuid': uuid })
       .populate('capacity')
+      .populate('documentType')
       .exec();
   }
 
