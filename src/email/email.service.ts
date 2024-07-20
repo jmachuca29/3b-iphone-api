@@ -30,7 +30,7 @@ export class EmailService {
 
       let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-      sendSmtpEmail.templateId = 2;
+      sendSmtpEmail.templateId = 3;
       sendSmtpEmail.sender = {
         name: "3B IPhone",
         email: "no-responder@3biphones.com",
@@ -38,14 +38,24 @@ export class EmailService {
       sendSmtpEmail.to = [{ email: sale?.user?.email, name: sale?.user?.name + ' ' + sale?.user?.lastName }];
       sendSmtpEmail.replyTo = { email: "no-responder@3biphones.com", name: "3B IPhone" };
       sendSmtpEmail.params = {
-        NAME: sale?.user?.name || 'Estimad@',
         ORDER: sale?.correlative,
+        NAME: sale?.user?.name || 'Estimad@',
+        LASTNAME: sale?.user?.lastName,
+        DOCUMENTTYPE: sale?.documentType?.description,
+        NUMBERDOCUMENT: sale?.documentNumber,
+        PHONENUMBER: sale?.user?.phoneNumber,
         DEPARTMENT: sale?.user?.department,
         PROVINCE: sale?.user?.province,
         DISTRICT: sale?.user?.district,
         ADDRESS: sale?.user?.address,
         PRODUCTNAME: sale?.productName,
+        GRADE: sale?.grade?.description,
         CAPACITY: sale?.capacity?.description,
+        IMEI1: sale?.firstImei,
+        IMEI2: sale?.secondImei,
+        SERIENUMBER: sale?.serieNumber,
+        BANKENTITY: sale?.bankEntity,
+        NUMBERACCOUNT: sale?.numberAccount,
         PRICE: sale?.price,
         DATE: calculateDate(sale?.createdAt) || '',
       };

@@ -36,6 +36,7 @@ export class SaleService {
     return this.saleModel.findOne({ 'uuid': uuid })
       .populate('capacity')
       .populate('documentType')
+      .populate('grade')
       .exec();
   }
 

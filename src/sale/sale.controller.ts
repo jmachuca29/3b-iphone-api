@@ -50,7 +50,8 @@ export class SaleController {
         }
       }
       const saleDB = await this.saleService.create(sale);
-      this.emailService.sendEmail(saleDB)
+      const salePopulated = await this.saleService.findbyUID(saleDB.uuid)
+      this.emailService.sendEmail(salePopulated)
       return saleDB
     } catch (error) {
       if (error.code === 11000) {
