@@ -40,10 +40,11 @@ export class ProductService {
   async findProductPrice(id: string, gradeId: string): Promise<number> {
     const product = await this.productModel.findById(id).exec();
     if (!product) throw new NotFoundException("Product does not exist!");
-    const prices: any[] = product.prices || [];
-    const priceFound = prices.find(
-      (price) => price.grade.toString() === gradeId
-    );
-    return priceFound ? priceFound.price : null;
+    return null
+    // const prices: any[] = product.prices || [];
+    // const priceFound = prices.find(
+    //   (price) => price.grade.toString() === gradeId
+    // );
+    // return priceFound ? priceFound.price : null;
   }
 }

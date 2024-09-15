@@ -28,13 +28,13 @@ export class Product {
   @Prop({ type: ImageSchema, required: false })
   image: Image;
 
-  @Prop([
-    {
-      grade: { type: mongoose.Schema.Types.ObjectId, ref: 'Grade' },
-      price: Number,
-    },
-  ])
-  prices: { grade: Grade; price: number }[];
+//   @Prop([
+//     {
+//       grade: { type: mongoose.Schema.Types.ObjectId, ref: 'Grade' },
+//       price: Number,
+//     },
+//   ])
+//   prices: { grade: Grade; price: number }[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
