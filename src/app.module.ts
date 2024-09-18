@@ -14,6 +14,8 @@ import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
 import { UbigeoModule } from './ubigeo/ubigeo.module';
 import { EmailModule } from './email/email.module';
+import { AttributeModule } from './attribute/attribute.module';
+import { ProductVariationModule } from './product-variation/product-variation.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { EmailModule } from './email/email.module';
     AuthModule,
     UbigeoModule,
     EmailModule,
+    AttributeModule,
+    ProductVariationModule,
     MongooseModule.forRoot(process.env.DB),
   ],
   controllers: [],
