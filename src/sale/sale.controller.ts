@@ -33,11 +33,19 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
+      console.log('body')
+      console.log(body)
       const productId = { ...body }?.productId?.toString() || ''
-      const grade = { ...body }.grade.toString()
+      const gradeId = { ...body }.grade.toString() || ''
+      const capacityId = { ...body }.capacity.toString() || ''
+      const payload = {
+        productId,
+        gradeId,
+        capacityId
+      }
       let sale: CreateSaleDto = null
       if (productId !== '') {
-        const productPrice = await this.productService.findProductPrice(productId, grade)
+        const productPrice = await this.productService.findProductPrice(payload)
         sale = {
           ...body,
           price: productPrice,

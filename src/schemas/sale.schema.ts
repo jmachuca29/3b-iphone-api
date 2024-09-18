@@ -9,6 +9,7 @@ import { SaleStatus } from 'src/constant/sale';
 import { Product } from './product.schema';
 import { User as UserExternal } from './user.schema';
 import sequenceGenerator from 'src/utils/correlative';
+import { Color } from './color.schema';
 
 @Schema()
 export class User {
@@ -53,6 +54,9 @@ export class Sale {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Capacity', required: true })
   capacity: Capacity;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Color', required: true })
+  color: Color;
 
   @Prop({ required: true })
   originalBox: boolean;
@@ -107,5 +111,5 @@ export const SaleSchema = SchemaFactory.createForClass(Sale);
 
 export const configureSaleSchema = (connection: Connection) => {
   const AutoIncrement = sequenceGenerator(connection);
-  SaleSchema.plugin(AutoIncrement, { inc_field: 'correlative', id: 'sale_sequence' });  
+  SaleSchema.plugin(AutoIncrement, { inc_field: 'correlative', id: 'sale_sequence' });
 };

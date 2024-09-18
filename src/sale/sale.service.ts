@@ -13,7 +13,7 @@ export class SaleService {
   async create(createSaleDto: CreateSaleDto): Promise<Sale> {
     const createdSale = new this.saleModel(createSaleDto);
     await createdSale.save();
-    return this.saleModel.findById(createdSale._id).populate('capacity').exec();
+    return this.saleModel.findById(createdSale._id).populate('capacity').populate('color').exec();
   }
 
   async findAll(): Promise<Sale[]> {
@@ -35,6 +35,7 @@ export class SaleService {
   async findbyUID(uuid: string): Promise<Sale> {
     return this.saleModel.findOne({ 'uuid': uuid })
       .populate('capacity')
+      .populate('color')
       .populate('documentType')
       .populate('grade')
       .exec();
