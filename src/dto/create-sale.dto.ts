@@ -42,7 +42,7 @@ export class CreateSaleDto {
   @IsMongoId()
   @IsOptional()
   userId: ObjectId;
-  
+
   @ApiProperty({
     description: "Reference to Product document",
     required: true,
@@ -62,6 +62,14 @@ export class CreateSaleDto {
   @IsMongoId()
   @IsNotEmpty()
   capacity: ObjectId;
+
+  @ApiProperty({
+    description: "Reference to Color document",
+    required: true,
+  })
+  @IsMongoId()
+  @IsNotEmpty()
+  color: ObjectId;
 
   @IsBoolean()
   @IsNotEmpty()
@@ -125,4 +133,3 @@ export class CreateSaleDto {
   documentNumber: string;
 
 }
-

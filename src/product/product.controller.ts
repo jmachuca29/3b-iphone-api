@@ -57,9 +57,9 @@ export class ProductController {
     return product;
   }
 
-  @Get(":id/:gradeId")
-  async findProductPrice(@Param("id") id: string, @Param("gradeId") gradeId: string) {
-    const productPrice = await this.productService.findProductPrice(id, gradeId)
+  @Post("get-price")
+  async findProductPrice(@Body() body: any) {
+    const productPrice = await this.productService.findProductPrice(body)
     if (!productPrice) throw new NotFoundException("Product price does not exist!");
     return productPrice;
   }
