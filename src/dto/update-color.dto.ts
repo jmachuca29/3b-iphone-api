@@ -4,4 +4,8 @@ export class UpdateColorDto {
     @IsOptional()
     @IsString()
     description: string;
+
+    @IsOptional()
+    @IsString()
+    code: string;
 }

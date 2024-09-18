@@ -20,14 +20,6 @@ export class UpdateProductDto {
   @IsOptional()
   description: string;
 
-  @ApiProperty({
-    description: 'Reference to Capacity document',
-    required: true,
-  })
-  @IsString()
-  @IsOptional()
-  capacity: ObjectId;
-
   @ValidateNested()
   @Type(() => ImageDTO)
   @IsOptional()
@@ -49,6 +41,11 @@ export class PriceDTO {
   @IsString()
   @IsOptional()
   grade: ObjectId;
+
+  @ApiProperty({ description: 'Reference to Capacity document', required: true })
+  @IsString()
+  @IsOptional()
+  capacity: ObjectId;
 
   @ApiProperty({ description: 'Price of the product for this grade', required: true })
   @IsOptional()

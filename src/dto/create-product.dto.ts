@@ -19,14 +19,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({
-    description: 'Reference to Capacity document',
-    required: true,
-  })
-  @IsMongoId()
-  @IsNotEmpty()
-  capacity: ObjectId;
-
   @ValidateNested()
   @Type(() => ImageDTO)
   @IsOptional()
@@ -48,6 +40,11 @@ export class PriceDTO {
   @IsMongoId()
   @IsNotEmpty()
   grade: ObjectId;
+
+  @ApiProperty({ description: 'Reference to Capacity document', required: true })
+  @IsMongoId()
+  @IsNotEmpty()
+  capacity: ObjectId;
 
   @ApiProperty({ description: 'Price of the product for this grade', required: true })
   @IsNotEmpty()

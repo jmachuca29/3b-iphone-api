@@ -6,11 +6,11 @@ import { Grade } from './grade.schema';
 
 @Schema()
 class Image {
-  @Prop({ trim: true, required: true })
-  name: string;
+    @Prop({ trim: true, required: true })
+    name: string;
 
-  @Prop({ trim: true, required: true })
-  url: string;
+    @Prop({ trim: true, required: true })
+    url: string;
 }
 
 const ImageSchema = SchemaFactory.createForClass(Image);
@@ -19,22 +19,23 @@ export type ProductDocument = HydratedDocument<Product>;
 
 @Schema()
 export class Product {
-  @Prop({ trim: true, required: true })
-  description: string;
+    @Prop({ trim: true, required: true })
+    description: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Capacity' })
-  capacity: Capacity;
+    @Prop()
+    colors: Color[];
 
-  @Prop({ type: ImageSchema, required: false })
-  image: Image;
+    @Prop({ type: ImageSchema, required: false })
+    image: Image;
 
-//   @Prop([
-//     {
-//       grade: { type: mongoose.Schema.Types.ObjectId, ref: 'Grade' },
-//       price: Number,
-//     },
-//   ])
-//   prices: { grade: Grade; price: number }[];
+    @Prop([
+        {
+            grade: { type: mongoose.Schema.Types.ObjectId, ref: 'Grade' },
+            capacity: { type: mongoose.Schema.Types.ObjectId, ref: 'Capacity' },
+            price: Number,
+        },
+    ])
+    prices: { grade: Grade; price: number }[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
