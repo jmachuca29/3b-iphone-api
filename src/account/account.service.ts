@@ -37,7 +37,7 @@ export class AccountService {
 
     async update(
         id: string,
-        createAccountDto: UpdateAccountDto
+        createAccountDto: Partial<UpdateAccountDto>
     ): Promise<Account> {
         return this.accountModel.findByIdAndUpdate(id, createAccountDto, {
             new: true,
@@ -48,12 +48,12 @@ export class AccountService {
         return this.accountModel.findOne({ email, role: role }).populate('password').exec();
     }
 
-    async forgotPassword(email: string): Promise<any> {
-        const token = this.jwtService.sign({ email }, { secret: process.env.JWT_PASSWORD_RESET })
+    async forgotPassword(email: string, id: string): Promise<any> {
+        const token = this.jwtService.sign({ email, id }, { secret: process.env.JWT_PASSWORD_RESET })
         return token
     }
 
-    async resetPassword(token: string): Promise<any> {
+    async verifyTokenResetPassword(token: string): Promise<any> {
         const payload = await this.jwtService.verifyAsync(
             token,
             {

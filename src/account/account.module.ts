@@ -6,15 +6,17 @@ import { AccountService } from "./account.service";
 import { UserModule } from "src/user/user.module";
 import { UserService } from "src/user/user.service";
 import { JwtModule } from "@nestjs/jwt";
+import { EmailModule } from "src/email/email.module";
 
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
     UserModule,
+    EmailModule,
     JwtModule.register({
         secret: process.env.JWT_PASSWORD_RESET,
-        signOptions: { expiresIn: "10s" },
+        signOptions: { expiresIn: "60s" },
       }),
   ],
   exports: [

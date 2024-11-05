@@ -20,12 +20,14 @@ import * as bcrypt from "bcrypt";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { CreateUserAccountDto } from "src/dto/create-user-account.dto";
 import { Role } from "src/schemas/account.schema";
+import { EmailService } from "src/email/email.service";
 
 @Controller("account")
 export class AccountController {
     constructor(
         private accountService: AccountService,
-        private userService: UserService
+        private userService: UserService,
+        private emailService: EmailService
     ) { }
 
     // @UseGuards(JwtAuthGuard)
@@ -118,10 +120,12 @@ export class AccountController {
     @Post("forgot-password")
     async forgotPassword(@Body() body: any) {
         const email = body.email;
-        const user = await this.accountService.findByEmailAndRole(email, Role.User);
-        if (user) {
-            const token = this.accountService.forgotPassword(email)
-            console.log(token)
+        const account = await this.accountService.findByEmailAndRole(email, Role.User);
+        if (account) {
+            const email = account.email
+            const id = account._id
+            const token = this.accountService.forgotPassword(email, id)
+            await this.emailService.sendResetPasswordEmail(email)
             return token
         }
         return 'Lo sentimos este usuario no existe'
@@ -130,13 +134,22 @@ export class AccountController {
     @Post("reset-password")
     async resetPassword(@Body() body: any) {
         const token = body.token;
+
         try {
-            const payload = await this.accountService.resetPassword(token)
-            console.log('payload', payload)
+            const payload = await this.accountService.verifyTokenResetPassword(token)
+            const password = body?.password
+            if(!password) throw new NotFoundException("New Password is required!");
+            const salt = bcrypt.genSaltSync();
+            const hash = bcrypt.hashSync(body.password, salt);
+            const updateData: Partial<UpdateAccountDto> = {
+                password: hash,
+                email: payload.email
+            };
+            const accountDB = await this.accountService.update(payload.id, updateData)
+            return accountDB
         } catch (error) {
-            console.log('error', error)
-            throw new UnauthorizedException();
+            throw new UnauthorizedException()
         }
-        return 'ok'
+
     }
 }
