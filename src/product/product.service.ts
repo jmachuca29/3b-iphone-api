@@ -52,7 +52,6 @@ export class ProductService {
         const gradeId = payload.gradeId
         const capacityId = payload.capacityId
         const product = await this.productModel.findById(id).exec();
-        console.log(product)
         const prices: any[] = product.prices || [];
         const priceFound = prices.find(
             (price) => price.grade.toString() === gradeId && price.capacity.toString() === capacityId

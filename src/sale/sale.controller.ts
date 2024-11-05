@@ -33,8 +33,6 @@ export class SaleController {
   @Post()
   async create(@Body() body: CreateSaleDto) {
     try {
-      console.log('body')
-      console.log(body)
       const productId = { ...body }?.productId?.toString() || ''
       const gradeId = { ...body }.grade.toString() || ''
       const capacityId = { ...body }.capacity.toString() || ''

@@ -8,7 +8,7 @@ export class Color {
   @Prop({ unique: true, trim: true, required: true })
   description: string;
 
-  @Prop({ trim: true })
+  @Prop({ trim: true, required: false })
   code: string;
 }
 

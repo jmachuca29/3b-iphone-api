@@ -6,6 +6,5 @@ export class CreateColorDto {
     description: string;
 
     @IsString()
-    @IsNotEmpty()
     code: string;
 }

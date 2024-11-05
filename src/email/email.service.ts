@@ -176,4 +176,35 @@ export class EmailService {
         return pdfBuffer;
     }
 
+    async sendResetPasswordEmail(email: string): Promise<any> {
+        let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+        return new Promise<any>(async (resolve, reject) => {
+            let apiKey = apiInstance.authentications["apiKey"];
+            apiKey.apiKey = process.env.BREVO_API_KEY;
+
+            let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+            sendSmtpEmail.templateId = 4;
+            sendSmtpEmail.sender = {
+                name: "3B IPhone",
+                email: "no-responder@3biphones.com",
+            };
+            sendSmtpEmail.to = [{ email: email }];
+            sendSmtpEmail.replyTo = { email: "no-responder@3biphones.com", name: "3B IPhone" };
+            sendSmtpEmail.params = {
+                DOMAIN: process.env.DOMAIN,
+            };
+
+            apiInstance.sendTransacEmail(sendSmtpEmail).then(
+                function (data) {
+                    console.log("API called successfully.");
+                    resolve(data);
+                },
+                function (error) {
+                    console.error(error);
+                    reject(error);
+                }
+            );
+        });
+    }
 }
